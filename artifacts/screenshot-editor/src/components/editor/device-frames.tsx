@@ -11,18 +11,27 @@ type FrameProps = {
 };
 
 // ─── CSS-drawn modern iPhone (11–17 style) ───────────────────────────────────
-// Uses pure CSS — no PNG, no blend modes. frameColor is applied directly
-// to the body and buttons so any color works perfectly.
+// Uses pure CSS — no PNG, no blend modes. frameColor is applied as a border
+// ring on the outer edge only — the body stays dark/realistic.
 export function Phone({ src, alt = "", style, hideEmpty, frameColor }: FrameProps) {
   const resolved = img(src);
-  const body = frameColor ?? "linear-gradient(160deg, #3A3A3C 0%, #1C1C1E 55%, #2C2C2E 100%)";
-  const btn  = frameColor ?? "linear-gradient(90deg, #252527 0%, #1A1A1C 100%)";
+
+  const bodyBg = "linear-gradient(160deg, #3A3A3C 0%, #1C1C1E 55%, #2C2C2E 100%)";
+  const btnBg  = "linear-gradient(90deg, #252527 0%, #1A1A1C 100%)";
+
+  const bodyShadow = [
+    frameColor ? `0 0 0 3px ${frameColor}` : null,
+    "inset 0 0 0 0.8px rgba(255,255,255,0.20)",
+    "inset 0 1px 0 rgba(255,255,255,0.10)",
+    "0 0 0 0.5px rgba(0,0,0,0.65)",
+    "0 22px 80px rgba(0,0,0,0.72)",
+  ].filter(Boolean).join(", ");
 
   const sideBtn = (pos: React.CSSProperties): React.CSSProperties => ({
     position: "absolute",
     width: "1.4%",
     borderRadius: pos.left != null ? "1.5px 0 0 1.5px" : "0 1.5px 1.5px 0",
-    background: btn,
+    background: frameColor ?? btnBg,
     boxShadow: pos.left != null
       ? "-1px 0 3px rgba(0,0,0,0.55), inset 1px 0 0 rgba(255,255,255,0.13)"
       : "1px 0 3px rgba(0,0,0,0.55), inset -1px 0 0 rgba(255,255,255,0.13)",
@@ -36,13 +45,8 @@ export function Phone({ src, alt = "", style, hideEmpty, frameColor }: FrameProp
       <div style={{
         position: "absolute", inset: 0,
         borderRadius: "11.5% / 5.3%",
-        background: body,
-        boxShadow: [
-          "inset 0 0 0 0.8px rgba(255,255,255,0.20)",
-          "inset 0 1px 0 rgba(255,255,255,0.10)",
-          "0 0 0 0.5px rgba(0,0,0,0.65)",
-          "0 22px 80px rgba(0,0,0,0.72)",
-        ].join(", "),
+        background: bodyBg,
+        boxShadow: bodyShadow,
       }} />
 
       {/* ── Left side: silent toggle + vol up + vol down ─── */}
@@ -100,10 +104,8 @@ export function Phone({ src, alt = "", style, hideEmpty, frameColor }: FrameProp
 
 export function AndroidPhone({ src, alt = "", style, hideEmpty, frameColor }: FrameProps) {
   const resolved = img(src);
-  const bodyColor = frameColor
-    ? frameColor
-    : "linear-gradient(160deg, #2a2a2e 0%, #18181b 100%)";
-  const bodyBackground = frameColor ? frameColor : undefined;
+  const bodyBg = "linear-gradient(160deg, #2a2a2e 0%, #18181b 100%)";
+  const borderShadow = frameColor ? `0 0 0 3px ${frameColor}, ` : "";
   return (
     <div style={{ position: "relative", aspectRatio: "9 / 19.5", ...style }}>
       <div
@@ -111,10 +113,8 @@ export function AndroidPhone({ src, alt = "", style, hideEmpty, frameColor }: Fr
           width: "100%",
           height: "100%",
           borderRadius: "8% / 4%",
-          background: bodyColor,
-          boxShadow: frameColor
-            ? `inset 0 0 0 1px rgba(255,255,255,0.12), 0 8px 40px rgba(0,0,0,0.55)`
-            : "inset 0 0 0 1px rgba(255,255,255,0.08), 0 8px 40px rgba(0,0,0,0.55)",
+          background: bodyBg,
+          boxShadow: `${borderShadow}inset 0 0 0 1px rgba(255,255,255,0.12), 0 8px 40px rgba(0,0,0,0.55)`,
           position: "relative",
           overflow: "hidden",
         }}
@@ -163,9 +163,8 @@ export function AndroidPhone({ src, alt = "", style, hideEmpty, frameColor }: Fr
 
 export function AndroidTabletP({ src, alt = "", style, hideEmpty, frameColor }: FrameProps) {
   const resolved = img(src);
-  const bodyColor = frameColor
-    ? frameColor
-    : "linear-gradient(160deg, #2a2a2e 0%, #18181b 100%)";
+  const bodyBg = "linear-gradient(160deg, #2a2a2e 0%, #18181b 100%)";
+  const borderShadow = frameColor ? `0 0 0 3px ${frameColor}, ` : "";
   return (
     <div style={{ position: "relative", aspectRatio: "5 / 8", ...style }}>
       <div
@@ -173,8 +172,8 @@ export function AndroidTabletP({ src, alt = "", style, hideEmpty, frameColor }: 
           width: "100%",
           height: "100%",
           borderRadius: "4.5% / 2.8%",
-          background: bodyColor,
-          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08), 0 8px 48px rgba(0,0,0,0.6)",
+          background: bodyBg,
+          boxShadow: `${borderShadow}inset 0 0 0 1px rgba(255,255,255,0.08), 0 8px 48px rgba(0,0,0,0.6)`,
           position: "relative",
           overflow: "hidden",
         }}
@@ -222,9 +221,8 @@ export function AndroidTabletP({ src, alt = "", style, hideEmpty, frameColor }: 
 
 export function AndroidTabletL({ src, alt = "", style, hideEmpty, frameColor }: FrameProps) {
   const resolved = img(src);
-  const bodyColor = frameColor
-    ? frameColor
-    : "linear-gradient(160deg, #2a2a2e 0%, #18181b 100%)";
+  const bodyBg = "linear-gradient(160deg, #2a2a2e 0%, #18181b 100%)";
+  const borderShadow = frameColor ? `0 0 0 3px ${frameColor}, ` : "";
   return (
     <div style={{ position: "relative", aspectRatio: "8 / 5", ...style }}>
       <div
@@ -232,8 +230,8 @@ export function AndroidTabletL({ src, alt = "", style, hideEmpty, frameColor }: 
           width: "100%",
           height: "100%",
           borderRadius: "2.8% / 4.5%",
-          background: bodyColor,
-          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08), 0 8px 48px rgba(0,0,0,0.6)",
+          background: bodyBg,
+          boxShadow: `${borderShadow}inset 0 0 0 1px rgba(255,255,255,0.08), 0 8px 48px rgba(0,0,0,0.6)`,
           position: "relative",
           overflow: "hidden",
         }}
@@ -281,9 +279,8 @@ export function AndroidTabletL({ src, alt = "", style, hideEmpty, frameColor }: 
 
 export function IPad({ src, alt = "", style, hideEmpty, frameColor }: FrameProps) {
   const resolved = img(src);
-  const bodyColor = frameColor
-    ? frameColor
-    : "linear-gradient(180deg, #2C2C2E 0%, #1C1C1E 100%)";
+  const bodyBg = "linear-gradient(180deg, #2C2C2E 0%, #1C1C1E 100%)";
+  const borderShadow = frameColor ? `0 0 0 3px ${frameColor}, ` : "";
   return (
     <div style={{ position: "relative", aspectRatio: "770 / 1000", ...style }}>
       <div
@@ -291,10 +288,10 @@ export function IPad({ src, alt = "", style, hideEmpty, frameColor }: FrameProps
           width: "100%",
           height: "100%",
           borderRadius: "5% / 3.6%",
-          background: bodyColor,
+          background: bodyBg,
           position: "relative",
           overflow: "hidden",
-          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1), 0 8px 40px rgba(0,0,0,0.6)",
+          boxShadow: `${borderShadow}inset 0 0 0 1px rgba(255,255,255,0.1), 0 8px 40px rgba(0,0,0,0.6)`,
         }}
       >
         <div

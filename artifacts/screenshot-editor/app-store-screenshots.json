@@ -1,6 +1,6 @@
 {
   "appName": "My App",
-  "themeId": "arctic",
+  "themeId": "sunset",
   "locales": [
     "en"
   ],
@@ -19,19 +19,19 @@
         "headline": {
           "en": "Sell one\nidea per slide."
         },
-        "screenshot": "",
+        "screenshot": "/screenshots/uploaded/9e0064fba02eb77b.jpg",
         "transforms": {
           "device": {
-            "x": 225.2955608425099,
-            "y": 673.2633621192585,
-            "width": 1013.6355043227666,
-            "height": 2064.96,
-            "rotation": -180,
+            "x": 79.2955647299474,
+            "y": 532.871745410605,
+            "width": 1160,
+            "height": 2513,
+            "rotation": 1,
             "zIndex": 3
           },
           "caption": {
-            "x": 78.85874125874125,
-            "y": 0,
+            "x": 104.03493334362051,
+            "y": 93.59440559440557,
             "width": 1108.8,
             "height": 803.0400000000001,
             "rotation": 0,
@@ -40,7 +40,8 @@
         },
         "inverted": false,
         "pattern": "grid",
-        "patternIntensity": 55
+        "patternIntensity": 55,
+        "frameColor": "#c5a46e"
       },
       {
         "id": "s_mpc7phxa_1",
@@ -67,10 +68,10 @@
         "screenshotSecondary": "",
         "transforms": {
           "device": {
-            "x": 213.86696503496506,
-            "y": 912.0641118881117,
-            "width": 857.7526153846154,
-            "height": 1858.464,
+            "x": 301.0907359306649,
+            "y": 691.0780924975163,
+            "width": 851,
+            "height": 1845,
             "rotation": 0,
             "zIndex": 3
           }
