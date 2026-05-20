@@ -1,0 +1,248 @@
+{
+  "appName": "My App",
+  "themeId": "arctic",
+  "locales": [
+    "en"
+  ],
+  "locale": "en",
+  "device": "iphone",
+  "orientation": "portrait",
+  "appIcon": "",
+  "slidesByDevice": {
+    "iphone": [
+      {
+        "id": "s_mpc7phxa_0",
+        "layout": "hero",
+        "label": {
+          "en": "MEET YOUR APP"
+        },
+        "headline": {
+          "en": "Sell one\nidea per slide."
+        },
+        "screenshot": "",
+        "transforms": {
+          "device": {
+            "x": 225.2955608425099,
+            "y": 673.2633621192585,
+            "width": 1013.6355043227666,
+            "height": 2064.96,
+            "rotation": -180,
+            "zIndex": 3
+          },
+          "caption": {
+            "x": 118.97062937062935,
+            "y": 17.448671328671203,
+            "width": 1108.8,
+            "height": 803.0400000000001,
+            "rotation": 0,
+            "zIndex": 4
+          }
+        },
+        "inverted": false,
+        "pattern": "grid",
+        "patternIntensity": 55
+      },
+      {
+        "id": "s_mpc7phxa_1",
+        "layout": "device-bottom",
+        "label": {
+          "en": "FEATURE 01"
+        },
+        "headline": {
+          "en": "Your headline\nlives here."
+        },
+        "screenshot": "",
+        "inverted": true
+      },
+      {
+        "id": "s_mpc7phxa_2",
+        "layout": "two-devices",
+        "label": {
+          "en": "FEATURE 02"
+        },
+        "headline": {
+          "en": "Show two\nscreens at once."
+        },
+        "screenshot": "",
+        "screenshotSecondary": ""
+      },
+      {
+        "id": "s_mpc7phxa_3",
+        "layout": "device-top",
+        "label": {
+          "en": "FEATURE 03"
+        },
+        "headline": {
+          "en": "Flip the contrast\nfor visual rhythm."
+        },
+        "screenshot": "",
+        "inverted": true
+      },
+      {
+        "id": "s_mpc7phxa_4",
+        "layout": "no-device",
+        "label": {
+          "en": "MORE"
+        },
+        "headline": {
+          "en": "And so\nmuch more."
+        },
+        "screenshot": ""
+      }
+    ],
+    "android": [
+      {
+        "id": "s_mpc7phxa_5",
+        "layout": "hero",
+        "label": {
+          "en": "MEET YOUR APP"
+        },
+        "headline": {
+          "en": "Sell one\nidea per slide."
+        },
+        "screenshot": ""
+      },
+      {
+        "id": "s_mpc7phxa_6",
+        "layout": "device-bottom",
+        "label": {
+          "en": "FEATURE 01"
+        },
+        "headline": {
+          "en": "Your headline\nlives here."
+        },
+        "screenshot": ""
+      },
+      {
+        "id": "s_mpc7phxa_7",
+        "layout": "two-devices",
+        "label": {
+          "en": "FEATURE 02"
+        },
+        "headline": {
+          "en": "Show two\nscreens at once."
+        },
+        "screenshot": "",
+        "screenshotSecondary": ""
+      },
+      {
+        "id": "s_mpc7phxa_8",
+        "layout": "device-top",
+        "label": {
+          "en": "FEATURE 03"
+        },
+        "headline": {
+          "en": "Flip the contrast\nfor visual rhythm."
+        },
+        "screenshot": "",
+        "inverted": true
+      },
+      {
+        "id": "s_mpc7phxa_9",
+        "layout": "no-device",
+        "label": {
+          "en": "MORE"
+        },
+        "headline": {
+          "en": "And so\nmuch more."
+        },
+        "screenshot": ""
+      }
+    ],
+    "ipad": [
+      {
+        "id": "s_mpc7phxa_a",
+        "layout": "hero",
+        "label": {
+          "en": "MEET YOUR APP"
+        },
+        "headline": {
+          "en": "Made for\nthe big screen."
+        },
+        "screenshot": ""
+      },
+      {
+        "id": "s_mpc7phxa_b",
+        "layout": "device-bottom",
+        "label": {
+          "en": "FEATURE 01"
+        },
+        "headline": {
+          "en": "Built for\nfocus."
+        },
+        "screenshot": ""
+      },
+      {
+        "id": "s_mpc7phxa_c",
+        "layout": "device-top",
+        "label": {
+          "en": "FEATURE 02"
+        },
+        "headline": {
+          "en": "Always within reach."
+        },
+        "screenshot": "",
+        "inverted": true
+      }
+    ],
+    "android-7": [
+      {
+        "id": "s_mpc7phxa_d",
+        "layout": "hero",
+        "label": {
+          "en": "MEET YOUR APP"
+        },
+        "headline": {
+          "en": "Pocket-sized\npower."
+        },
+        "screenshot": ""
+      },
+      {
+        "id": "s_mpc7phxa_e",
+        "layout": "split-landscape",
+        "label": {
+          "en": "FEATURE 01"
+        },
+        "headline": {
+          "en": "Wide canvas,\nbigger ideas."
+        },
+        "screenshot": ""
+      }
+    ],
+    "android-10": [
+      {
+        "id": "s_mpc7phxa_f",
+        "layout": "hero",
+        "label": {
+          "en": "MEET YOUR APP"
+        },
+        "headline": {
+          "en": "Made for\nthe big screen."
+        },
+        "screenshot": ""
+      },
+      {
+        "id": "s_mpc7phxa_g",
+        "layout": "split-landscape",
+        "label": {
+          "en": "FEATURE 01"
+        },
+        "headline": {
+          "en": "Wide canvas,\nbigger ideas."
+        },
+        "screenshot": ""
+      }
+    ],
+    "feature-graphic": [
+      {
+        "id": "s_mpc7phxa_h",
+        "layout": "feature-graphic",
+        "label": {},
+        "headline": {
+          "en": "Your tagline goes here."
+        },
+        "screenshot": ""
+      }
+    ]
+  }
+}
