@@ -22,8 +22,8 @@
         "screenshot": "/screenshots/uploaded/9e0064fba02eb77b.jpg",
         "transforms": {
           "device": {
-            "x": 79.2955647299474,
-            "y": 532.871745410605,
+            "x": 65.92493535931803,
+            "y": 827.0255915644509,
             "width": 1160,
             "height": 2513,
             "rotation": 1,
@@ -41,7 +41,7 @@
         "inverted": false,
         "pattern": "grid",
         "patternIntensity": 55,
-        "frameColor": "#c5a46e"
+        "frameColor": "#8b2020"
       },
       {
         "id": "s_mpc7phxa_1",
