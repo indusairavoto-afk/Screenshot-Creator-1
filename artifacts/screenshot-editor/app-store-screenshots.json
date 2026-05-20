@@ -30,8 +30,8 @@
             "zIndex": 3
           },
           "caption": {
-            "x": 118.97062937062935,
-            "y": 17.448671328671203,
+            "x": 78.85874125874125,
+            "y": 0,
             "width": 1108.8,
             "height": 803.0400000000001,
             "rotation": 0,
@@ -64,7 +64,17 @@
           "en": "Show two\nscreens at once."
         },
         "screenshot": "",
-        "screenshotSecondary": ""
+        "screenshotSecondary": "",
+        "transforms": {
+          "device": {
+            "x": 213.86696503496506,
+            "y": 912.0641118881117,
+            "width": 857.7526153846154,
+            "height": 1858.464,
+            "rotation": 0,
+            "zIndex": 3
+          }
+        }
       },
       {
         "id": "s_mpc7phxa_3",

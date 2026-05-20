@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { RotateCw } from "lucide-react";
 import { Rnd } from "react-rnd";
 import type {
   Callout,
@@ -717,6 +718,13 @@ export function SlideCanvas({
             zIndex,
           })
         }
+        onRotate={(deg) =>
+          edit?.onElementChange?.("caption", {
+            ...captionRect,
+            rotation: deg,
+            zIndex,
+          })
+        }
         zIndex={zIndex}
         selected={selectedElementId === "caption"}
         onSelect={() => edit?.onSelectElement?.("caption")}
@@ -744,6 +752,13 @@ export function SlideCanvas({
           edit?.onElementChange?.(id, {
             ...t,
             rotation,
+            zIndex,
+          })
+        }
+        onRotate={(deg) =>
+          edit?.onElementChange?.(id, {
+            ...rect,
+            rotation: deg,
             zIndex,
           })
         }
@@ -1261,6 +1276,7 @@ function Movable({
   editable,
   previewScale,
   onChange,
+  onRotate,
   children,
   lockAspectRatio,
   zIndex,
@@ -1275,6 +1291,7 @@ function Movable({
   editable?: boolean;
   previewScale: number;
   onChange: (t: ElementTransform) => void;
+  onRotate?: (deg: number) => void;
   children: React.ReactNode;
   lockAspectRatio?: number | boolean;
   zIndex?: number;
@@ -1283,12 +1300,39 @@ function Movable({
   selected?: boolean;
   onSelect?: () => void;
 }) {
+  const innerRef = React.useRef<HTMLDivElement>(null);
+
+  function startRotate(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!onRotate) return;
+
+    function onMove(ev: MouseEvent) {
+      const el = innerRef.current;
+      if (!el) return;
+      const box = el.getBoundingClientRect();
+      const cx = box.left + box.width / 2;
+      const cy = box.top + box.height / 2;
+      const angle = Math.atan2(ev.clientY - cy, ev.clientX - cx) * (180 / Math.PI) + 90;
+      onRotate(Math.round(angle));
+    }
+
+    function onUp() {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    }
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  }
+
   // Rotation lives on the inner wrapper so the Rnd's axis-aligned rect remains
   // the authoritative bounding box for drag/resize math. A bare mousedown
   // listener (no stopPropagation — that would prevent react-rnd from starting
   // a drag) marks the element as the current selection.
   const rotated = (
     <div
+      ref={innerRef}
       onMouseDown={() => {
         if (editable) onSelect?.();
       }}
@@ -1297,6 +1341,7 @@ function Movable({
         height: "100%",
         transform: rotation ? `rotate(${rotation}deg)` : undefined,
         transformOrigin: "center center",
+        position: "relative",
       }}
     >
       {children}
@@ -1322,6 +1367,33 @@ function Movable({
   }
 
   const display = clampRect(rect, cW, cH, allowOverflow);
+
+  const rotateHandle = selected && onRotate ? (
+    <div
+      onMouseDown={startRotate}
+      style={{
+        position: "absolute",
+        top: -38,
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: 28,
+        height: 28,
+        borderRadius: "50%",
+        background: "rgba(255,255,255,0.95)",
+        border: "1.5px solid rgba(91,124,250,0.85)",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "grab",
+        zIndex: 9999,
+        pointerEvents: "all",
+      }}
+      title="Drag to rotate"
+    >
+      <RotateCw size={14} color="#5b7cfa" strokeWidth={2.2} />
+    </div>
+  ) : null;
 
   return (
     <Rnd
@@ -1355,10 +1427,11 @@ function Movable({
         );
         onChange(next);
       }}
-      style={{ zIndex }}
+      style={{ zIndex, overflow: "visible" }}
       resizeHandleStyles={handleStyle}
       className={selected ? "rnd-editable rnd-selected" : "rnd-editable"}
     >
+      {rotateHandle}
       {rotated}
     </Rnd>
   );
