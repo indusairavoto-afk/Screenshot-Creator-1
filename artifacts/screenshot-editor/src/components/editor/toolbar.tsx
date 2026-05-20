@@ -2,7 +2,7 @@
 import * as React from "react";
 import {
   AlertTriangle, Check, Cloud, Crosshair, Download,
-  Image as ImageIcon, Languages, Loader2, Palette, RotateCcw, ScanSearch, Type, Trash2, ZoomIn,
+  Image as ImageIcon, Languages, Loader2, Palette, RotateCcw, ScanSearch, Smile, Type, Trash2, ZoomIn,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 
 // ─── types ───────────────────────────────────────────────────────────────────
 
-type Panel = "style" | "content" | "media" | "callouts" | "translate" | null;
+type Panel = "style" | "content" | "media" | "callouts" | "stickers" | "translate" | null;
 
 type Props = {
   // device / export controls
@@ -55,6 +55,7 @@ type Props = {
   onSelectCallout: (id: string | null) => void;
   onDeleteCallout: (id: string) => void;
   onUpdateCallout: (c: Callout) => void;
+  onAddSticker: (emoji: string) => void;
   fontFamily?: string;
   onFontChange: (v: string) => void;
   onTranslate: (langCode: string, langName: string) => Promise<void>;
@@ -116,6 +117,7 @@ export function Toolbar(props: Props) {
               onSelectCallout={props.onSelectCallout}
               onDeleteCallout={props.onDeleteCallout}
               onUpdateCallout={props.onUpdateCallout}
+              onAddSticker={props.onAddSticker}
               fontFamily={props.fontFamily}
               onFontChange={props.onFontChange}
               appName={props.appName}
@@ -149,6 +151,7 @@ export function Toolbar(props: Props) {
             <PanelButton icon={<Type className="h-3.5 w-3.5" />}    label="Content"  active={openPanel === "content"}  disabled={!slide} onClick={() => toggle("content")} />
             <PanelButton icon={<ImageIcon className="h-3.5 w-3.5" />} label="Media"  active={openPanel === "media"}    disabled={!slide} onClick={() => toggle("media")} />
             <PanelButton icon={<ScanSearch className="h-3.5 w-3.5" />} label="Callouts" active={openPanel === "callouts" || props.calloutMode} disabled={!slide} onClick={() => toggle("callouts")} accent={props.calloutMode} />
+            <PanelButton icon={<Smile className="h-3.5 w-3.5" />} label="Stickers" active={openPanel === "stickers"} disabled={!slide} onClick={() => toggle("stickers")} />
             <PanelButton icon={<Languages className="h-3.5 w-3.5" />} label="Translate" active={openPanel === "translate"} onClick={() => toggle("translate")} />
 
             <Pip />
@@ -334,10 +337,18 @@ function TranslatePanel({
 
 // ─── Panel (floating card above bar) ─────────────────────────────────────────
 
+const STICKER_GRID = [
+  { label: "Stars", items: ["⭐", "🌟", "✨", "💫", "⚡", "🔥", "💎", "🎯"] },
+  { label: "Celebrate", items: ["🎉", "🎊", "🏆", "🥇", "💯", "✅", "🚀", "🆕"] },
+  { label: "Hearts", items: ["❤️", "🧡", "💛", "💚", "💙", "💜", "🤍", "💕"] },
+  { label: "Vibes", items: ["😎", "🤩", "💪", "🙌", "👀", "🌈", "🌺", "🌸"] },
+  { label: "Nature", items: ["🌙", "☀️", "❄️", "🌊", "🌿", "🦋", "🍎", "☕"] },
+];
+
 function Panel({
   which, slide, locale, theme, themeId, setThemeId, onSlideChange,
   calloutMode, setCalloutMode, selectedCalloutId, onSelectCallout, onDeleteCallout, onUpdateCallout,
-  fontFamily, onFontChange, appName,
+  onAddSticker, fontFamily, onFontChange, appName,
 }: {
   which: NonNullable<Panel>;
   slide: Slide;
@@ -352,6 +363,7 @@ function Panel({
   onSelectCallout: (id: string | null) => void;
   onDeleteCallout: (id: string) => void;
   onUpdateCallout: (c: Callout) => void;
+  onAddSticker: (emoji: string) => void;
   fontFamily?: string;
   onFontChange: (v: string) => void;
   appName?: string;
@@ -815,6 +827,54 @@ function Panel({
             !calloutMode && (
               <p className="text-center text-[11px] text-muted-foreground">No callouts yet. Click "Draw Callout" then drag over the canvas.</p>
             )
+          )}
+        </div>
+      )}
+
+      {/* ── Stickers panel ───────────────────────────── */}
+      {which === "stickers" && (
+        <div className="space-y-3 p-4">
+          <PanelTitle>Stickers</PanelTitle>
+          <p className="text-[11px] leading-relaxed text-muted-foreground">
+            Tap any emoji to place it on the slide. Drag, resize, or rotate after placing.
+          </p>
+          {STICKER_GRID.map((group) => (
+            <div key={group.label}>
+              <p className="mb-1.5 text-[9px] font-bold uppercase tracking-wider text-muted-foreground/70">{group.label}</p>
+              <div className="grid grid-cols-8 gap-1">
+                {group.items.map((emoji) => (
+                  <button
+                    key={emoji}
+                    type="button"
+                    onClick={() => onAddSticker(emoji)}
+                    className="flex h-9 w-full items-center justify-center rounded-xl border border-border/50 bg-card text-xl transition-all hover:scale-110 hover:border-primary/40 hover:bg-muted/60 hover:shadow-sm active:scale-95"
+                    title={`Add ${emoji}`}
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+          {(slide.stickers || []).length > 0 && (
+            <div>
+              <p className="mb-1.5 text-[9px] font-bold uppercase tracking-wider text-muted-foreground/70">On this slide</p>
+              <div className="flex flex-wrap gap-1.5">
+                {(slide.stickers || []).map((s) => (
+                  <div key={s.id} className="flex items-center gap-1 rounded-lg border border-border/50 bg-card px-2 py-1">
+                    <span className="text-base leading-none">{s.emoji}</span>
+                    <button
+                      type="button"
+                      onClick={() => onSlideChange({ stickers: (slide.stickers || []).filter((sk) => sk.id !== s.id) })}
+                      className="text-muted-foreground/50 transition-colors hover:text-destructive"
+                      title="Remove"
+                    >
+                      <Trash2 className="h-2.5 w-2.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}

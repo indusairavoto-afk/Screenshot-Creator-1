@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { RotateCw } from "lucide-react";
+import { RotateCw, X } from "lucide-react";
 import { Rnd } from "react-rnd";
 import type {
   Callout,
@@ -10,6 +10,7 @@ import type {
   Orientation,
   PatternId,
   Slide,
+  Sticker,
   Theme,
 } from "@/lib/types";
 import { nid } from "@/lib/defaults";
@@ -114,6 +115,10 @@ type Props = {
   onAddCallout?: (c: Callout) => void;
   onUpdateCallout?: (c: Callout) => void;
   onSelectCallout?: (id: string | null) => void;
+  selectedStickerId?: string | null;
+  onUpdateSticker?: (s: Sticker) => void;
+  onDeleteSticker?: (id: string) => void;
+  onSelectSticker?: (id: string | null) => void;
 };
 
 // ---------- Editable text helpers ----------
@@ -784,7 +789,10 @@ export function SlideCanvas({
   // device/caption clicks from accidentally deselecting.
   const handleBackgroundMouseDown = editable
     ? (e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.target === e.currentTarget) edit?.onSelectElement?.(null);
+        if (e.target === e.currentTarget) {
+          edit?.onSelectElement?.(null);
+          onSelectSticker?.(null);
+        }
       }
     : undefined;
 
@@ -922,6 +930,41 @@ export function SlideCanvas({
           onSelect={onSelectCallout}
           onUpdate={onUpdateCallout}
         />
+      ))}
+
+      {/* Stickers */}
+      {(slide.stickers || []).map((sticker) => (
+        <Movable
+          key={sticker.id}
+          rect={{ x: sticker.x, y: sticker.y, width: sticker.width, height: sticker.height }}
+          cW={cW}
+          cH={cH}
+          editable={editable}
+          previewScale={previewScale ?? 1}
+          rotation={sticker.rotation ?? 0}
+          onChange={(t) => onUpdateSticker?.({ ...sticker, ...t })}
+          onRotate={(deg) => onUpdateSticker?.({ ...sticker, rotation: deg })}
+          onDelete={() => onDeleteSticker?.(sticker.id)}
+          zIndex={sticker.zIndex ?? 20}
+          allowOverflow
+          selected={selectedStickerId === sticker.id}
+          onSelect={() => onSelectSticker?.(sticker.id)}
+        >
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "min(80%, 140px)",
+              userSelect: "none",
+              lineHeight: 1,
+            }}
+          >
+            {sticker.emoji}
+          </div>
+        </Movable>
       ))}
 
       {/* Callout draw overlay — captures mouse for new callout creation */}
@@ -1277,6 +1320,7 @@ function Movable({
   previewScale,
   onChange,
   onRotate,
+  onDelete,
   children,
   lockAspectRatio,
   zIndex,
@@ -1292,6 +1336,7 @@ function Movable({
   previewScale: number;
   onChange: (t: ElementTransform) => void;
   onRotate?: (deg: number) => void;
+  onDelete?: () => void;
   children: React.ReactNode;
   lockAspectRatio?: number | boolean;
   zIndex?: number;
@@ -1395,6 +1440,32 @@ function Movable({
     </div>
   ) : null;
 
+  const deleteHandle = selected && onDelete ? (
+    <div
+      onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
+      style={{
+        position: "absolute",
+        top: -10,
+        right: -10,
+        width: 24,
+        height: 24,
+        borderRadius: "50%",
+        background: "#ef4444",
+        border: "2px solid white",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        zIndex: 9999,
+        pointerEvents: "all",
+      }}
+      title="Delete sticker"
+    >
+      <X size={12} color="white" strokeWidth={2.5} />
+    </div>
+  ) : null;
+
   return (
     <Rnd
       bounds={allowOverflow ? undefined : "parent"}
@@ -1432,6 +1503,7 @@ function Movable({
       className={selected ? "rnd-editable rnd-selected" : "rnd-editable"}
     >
       {rotateHandle}
+      {deleteHandle}
       {rotated}
     </Rnd>
   );

@@ -14,7 +14,7 @@ import { detectPlatform, nid } from "@/lib/defaults";
 import { preloadImages, setImage } from "@/lib/image-cache";
 import { resolveScreenshot, writeLocalized } from "@/lib/locale";
 import { useProject } from "@/lib/storage";
-import type { Callout, Device, ElementId, Slide, ThemeId } from "@/lib/types";
+import type { Callout, Device, ElementId, Slide, Sticker, ThemeId } from "@/lib/types";
 import { PreviewStage } from "./preview-stage";
 import { Sidebar } from "./sidebar";
 import { SlideCanvas, getCanvas } from "./slide-canvas";
@@ -26,6 +26,7 @@ export function ScreenshotEditor() {
   const [selectedElementId, setSelectedElementId] = React.useState<ElementId | null>(null);
   const [calloutMode, setCalloutMode] = React.useState(false);
   const [selectedCalloutId, setSelectedCalloutId] = React.useState<string | null>(null);
+  const [selectedStickerId, setSelectedStickerId] = React.useState<string | null>(null);
   const [exporting, setExporting] = React.useState<string | null>(null);
   const [ready, setReady] = React.useState(false);
   const [exportLocaleOverride, setExportLocaleOverride] = React.useState<string | null>(null);
@@ -219,6 +220,52 @@ export function ScreenshotEditor() {
           ?.callouts?.filter((c) => c.id !== calloutId) || [],
       });
       setSelectedCalloutId(null);
+    },
+    [patchSlide, state.slidesByDevice, state.device],
+  );
+
+  const addSticker = React.useCallback(
+    (slideId: string, emoji: string) => {
+      const { cW, cH } = getCanvas(state.device, state.orientation);
+      const sticker: Sticker = {
+        id: nid(),
+        emoji,
+        x: Math.round(cW / 2 - 100),
+        y: Math.round(cH / 2 - 100),
+        width: 200,
+        height: 200,
+        zIndex: 20,
+      };
+      patchSlide(slideId, {
+        stickers: [
+          ...((state.slidesByDevice[state.device] || []).find((s) => s.id === slideId)?.stickers || []),
+          sticker,
+        ],
+      });
+      setSelectedStickerId(sticker.id);
+    },
+    [patchSlide, state.slidesByDevice, state.device, state.orientation],
+  );
+
+  const updateSticker = React.useCallback(
+    (slideId: string, sticker: Sticker) => {
+      patchSlide(slideId, {
+        stickers: (state.slidesByDevice[state.device] || [])
+          .find((s) => s.id === slideId)
+          ?.stickers?.map((sk) => (sk.id === sticker.id ? sticker : sk)) || [],
+      });
+    },
+    [patchSlide, state.slidesByDevice, state.device],
+  );
+
+  const deleteSticker = React.useCallback(
+    (slideId: string, stickerId: string) => {
+      patchSlide(slideId, {
+        stickers: (state.slidesByDevice[state.device] || [])
+          .find((s) => s.id === slideId)
+          ?.stickers?.filter((sk) => sk.id !== stickerId) || [],
+      });
+      setSelectedStickerId(null);
     },
     [patchSlide, state.slidesByDevice, state.device],
   );
@@ -611,6 +658,7 @@ export function ScreenshotEditor() {
         onSelectCallout={setSelectedCalloutId}
         onDeleteCallout={(cid) => activeSlide && deleteCallout(activeSlide.id, cid)}
         onUpdateCallout={(c) => activeSlide && updateCallout(activeSlide.id, c)}
+        onAddSticker={(emoji) => activeSlide && addSticker(activeSlide.id, emoji)}
       />
 
       {/* Main 2-column layout: Canvas | Slides */}
@@ -643,6 +691,10 @@ export function ScreenshotEditor() {
               onAddCallout={(c) => addCallout(activeSlide.id, c)}
               onUpdateCallout={(c) => updateCallout(activeSlide.id, c)}
               onSelectCallout={setSelectedCalloutId}
+              selectedStickerId={selectedStickerId}
+              onUpdateSticker={(s) => updateSticker(activeSlide.id, s)}
+              onDeleteSticker={(id) => deleteSticker(activeSlide.id, id)}
+              onSelectSticker={setSelectedStickerId}
             />
           ) : (
             <div className="flex flex-1 flex-col items-center justify-center gap-2 p-8 text-center text-sm text-muted-foreground">

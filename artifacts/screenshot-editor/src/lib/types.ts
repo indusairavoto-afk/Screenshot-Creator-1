@@ -49,6 +49,17 @@ export type PatternId =
   | "paper"
   | "depth";
 
+export type Sticker = {
+  id: string;
+  emoji: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotation?: number;
+  zIndex?: number;
+};
+
 export type Slide = {
   id: string;
   layout: SlideLayout;
@@ -62,6 +73,7 @@ export type Slide = {
   // Per-element overrides; when present, replaces layout default placement.
   transforms?: Partial<Record<ElementId, ElementTransform>>;
   callouts?: Callout[];       // zoom callout bubbles
+  stickers?: Sticker[];       // emoji stickers overlaid on the slide
   frameColor?: string;        // device frame tint (CSS color); undefined = device default
   gradient?: {               // custom background gradient; undefined = use theme colors
     color1: string;

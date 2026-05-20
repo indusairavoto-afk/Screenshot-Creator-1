@@ -9,6 +9,7 @@ import type {
   ElementTransform,
   Orientation,
   Slide,
+  Sticker,
   Theme,
 } from "@/lib/types";
 import { getCanvas, SlideCanvas } from "./slide-canvas";
@@ -32,6 +33,10 @@ type Props = {
   onAddCallout?: (c: Callout) => void;
   onUpdateCallout?: (c: Callout) => void;
   onSelectCallout?: (id: string | null) => void;
+  selectedStickerId?: string | null;
+  onUpdateSticker?: (s: Sticker) => void;
+  onDeleteSticker?: (id: string) => void;
+  onSelectSticker?: (id: string | null) => void;
   onScreenshotDrop?: (file: File) => void;
 };
 
@@ -56,6 +61,10 @@ export function PreviewStage({
   onAddCallout,
   onUpdateCallout,
   onSelectCallout,
+  selectedStickerId,
+  onUpdateSticker,
+  onDeleteSticker,
+  onSelectSticker,
   onScreenshotDrop,
 }: Props) {
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -142,6 +151,10 @@ export function PreviewStage({
           onAddCallout={onAddCallout}
           onUpdateCallout={onUpdateCallout}
           onSelectCallout={onSelectCallout}
+          selectedStickerId={selectedStickerId}
+          onUpdateSticker={onUpdateSticker}
+          onDeleteSticker={onDeleteSticker}
+          onSelectSticker={onSelectSticker}
         />
       </div>
 
